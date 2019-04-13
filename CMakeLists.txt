@@ -13,7 +13,8 @@ include_directories(${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDL2TTF_INCLU
 add_executable(
         platformer
         main.cpp
-        header.h)
+        classes/Game.cpp
+        classes/Game.h)
 
 target_link_libraries(
         platformer
