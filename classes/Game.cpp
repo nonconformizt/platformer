@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "GameObject.h"
 
-SDL_Texture * playerTex;
-SDL_Rect srcR, dstR;
+
+GameObject * player = nullptr;
 
 Game::Game()
 {}
@@ -17,16 +18,16 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
         window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
-        renderer = SDL_CreateRenderer(window, -1, 0);
-        if (renderer)
+        rend = SDL_CreateRenderer(window, -1, 0);
+        if (rend)
         {
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
         }
 
         isRunning = true;
     }
 
-    playerTex = TextureManager::load("./assets/player.png", renderer);
+    player = new GameObject("./assets/player.png", rend, 100, 100);
 }
 
 void Game::handleEvents()
@@ -47,21 +48,19 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    cnt++;
-    dstR.x = dstR.y = 0;
-    dstR.h = dstR.w = 64;
+    player->update();
 }
 
 void Game::render()
 {
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, playerTex, NULL, &dstR);
-    SDL_RenderPresent(renderer);
+    SDL_RenderClear(rend);
+    player->render();
+    SDL_RenderPresent(rend);
 }
 
 void Game::clean()
 {
     SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
+    SDL_DestroyRenderer(rend);
     SDL_Quit();
 }
