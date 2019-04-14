@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Mushroom.h"
+#include "Coin.h"
 #include "Map.h"
 
 SDL_Renderer * Game::rend = nullptr;
@@ -10,9 +11,15 @@ Map * map = nullptr;
 
 GameObject * player = nullptr;
 
-Mushroom * mush[10];
+Mushroom * mush[2];
 int mushrooms_x[2] = { WINDOW_W - 320, 192 };
 int mushrooms_y[2] = { 192, 224 };
+int mushrooms_count = 0;
+
+Coin * coins[4];
+int coins_x[4] = { 100, 34, 231, 444 };
+int coins_y[4] = { 342, 65, 645, 230 };
+int coins_count = 0;
 
 
 Game::Game()
@@ -42,6 +49,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     player = new GameObject("./assets/player.png", WINDOW_W - 80, 10);
     for (int i = 0; i < 2; ++i)
         mush[i] = new Mushroom("./assets/mushroom.png", mushrooms_x[i], mushrooms_y[i]);
+    for (int i = 0; i < 4; ++i)
+        coins[i] = new Coin("./assets/coin.png", coins_x[i], coins_y[i]);
     map = new Map();
 }
 
@@ -56,9 +65,11 @@ void Game::handleEvents()
             is_running = false;
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
             for (int i = 0; i < 2; ++i)
-                if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect()))
+                if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect())) {                    mush[i]->sound();
+                    mush[i]->sound();
                     mush[i]->isActive = false;
-                // increment counter
+                    mushrooms_count++;
+                }
         }
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_s)
             is_down = true;
@@ -94,17 +105,29 @@ void Game::update()
         if (!map->checkCollision(player->get_step_right()))
             player->move_right();
 
+    for (int i = 0; i < 4; ++i)
+        if (coins[i]->isActive && coins[i]->checkCollision(player->get_rect())) {
+            coins[i]->sound();
+            coins[i]->isActive = false;
+            coins_count++;
+        }
+
     player->update();
 }
 
 void Game::render()
 {
     SDL_RenderClear(rend);
+
     map->draw();
-    player->render();
     for (int i = 0; i < 2; ++i)
         if (mush[i]->isActive)
             mush[i]->render();
+    for (int i = 0; i < 4; ++i)
+        if (coins[i]->isActive)
+            coins[i]->render();
+    player->render();
+
     SDL_RenderPresent(rend);
 }
 

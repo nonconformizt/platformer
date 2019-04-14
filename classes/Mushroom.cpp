@@ -14,6 +14,12 @@ Mushroom::Mushroom(const char * texturesheet, int x, int y)
     dest.w = dest.h = 32;
 
     texture = TextureManager::load(texturesheet);
+
+    SDL_AudioSpec sound_spec;
+    SDL_LoadWAV("./assets/hit.wav", &sound_spec, &sound_buf, &sound_len);
+    // open audio device
+    device = SDL_OpenAudioDevice(nullptr, 0, &sound_spec, nullptr, 0);
+
 }
 
 void Mushroom::render()
@@ -33,3 +39,9 @@ bool Mushroom::checkCollision(SDL_Rect rect)
     return distance <= 64;
 }
 
+void Mushroom::sound()
+{
+    SDL_ClearQueuedAudio(device);
+    SDL_QueueAudio(device, sound_buf, sound_len);
+    SDL_PauseAudioDevice(device, 0);
+}

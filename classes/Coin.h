@@ -1,14 +1,13 @@
 
-#ifndef PLATFORMER_MUSHROOM_H
-#define PLATFORMER_MUSHROOM_H
+#ifndef PLATFORMER_COIN_H
+#define PLATFORMER_COIN_H
 
 #include "Game.h"
 
-
-class Mushroom {
+class Coin {
 
 public:
-    Mushroom(const char * texturesheet, int x, int y);
+    Coin(const char * texturesheet, int x, int y);
     void render();
     void sound();
     bool isActive;
@@ -25,4 +24,4 @@ private:
 };
 
 
-#endif //PLATFORMER_MUSHROOM_H
+#endif //PLATFORMER_COIN_H

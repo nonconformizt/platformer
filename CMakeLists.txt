@@ -14,7 +14,7 @@ add_executable(
         platformer
         main.cpp
         classes/Game.cpp
-        classes/Game.h classes/TextureManager.cpp classes/TextureManager.h classes/GameObject.cpp classes/GameObject.h classes/Map.cpp classes/Map.h classes/Mushroom.cpp classes/Mushroom.h)
+        classes/Game.h classes/TextureManager.cpp classes/TextureManager.h classes/GameObject.cpp classes/GameObject.h classes/Map.cpp classes/Map.h classes/Mushroom.cpp classes/Mushroom.h classes/Coin.cpp classes/Coin.h)
 
 target_link_libraries(
         platformer
