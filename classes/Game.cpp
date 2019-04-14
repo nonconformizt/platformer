@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "GameObject.h"
+#include "Mushroom.h"
 #include "Map.h"
 
 SDL_Renderer * Game::rend = nullptr;
@@ -8,6 +9,11 @@ SDL_Renderer * Game::rend = nullptr;
 Map * map = nullptr;
 
 GameObject * player = nullptr;
+
+Mushroom * mush[10];
+int mushrooms_x[2] = { WINDOW_W - 320, 192 };
+int mushrooms_y[2] = { 192, 224 };
+
 
 Game::Game()
 {
@@ -34,6 +40,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     }
 
     player = new GameObject("./assets/player.png", WINDOW_W - 80, 10);
+    for (int i = 0; i < 2; ++i)
+        mush[i] = new Mushroom("./assets/mushroom.png", mushrooms_x[i], mushrooms_y[i]);
     map = new Map();
 }
 
@@ -46,21 +54,27 @@ void Game::handleEvents()
             is_running = false;
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
             is_running = false;
-        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN)
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
+            for (int i = 0; i < 2; ++i)
+                if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect()))
+                    mush[i]->isActive = false;
+                // increment counter
+        }
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_s)
             is_down = true;
-        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP)
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_w)
             is_up = true;
-        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT)
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_d)
             is_right = true;
-        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT)
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_a)
             is_left = true;
-        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN)
+        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_s)
             is_down = false;
-        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP)
+        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_w)
             is_up = false;
-        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT)
+        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_d)
             is_right = false;
-        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT)
+        else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_a)
             is_left = false;
 }
 
@@ -88,6 +102,9 @@ void Game::render()
     SDL_RenderClear(rend);
     map->draw();
     player->render();
+    for (int i = 0; i < 2; ++i)
+        if (mush[i]->isActive)
+            mush[i]->render();
     SDL_RenderPresent(rend);
 }
 

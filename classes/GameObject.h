@@ -19,6 +19,7 @@ public:
     void move_right() { xpos += SPEED; }
     void move_left() { xpos -= SPEED; }
 
+    SDL_Rect get_rect() { return dest; }
     SDL_Rect get_step_down() { SDL_Rect r = { xpos, ypos + SPEED, dest.w, dest.h }; return r; }
     SDL_Rect get_step_up() { SDL_Rect r = { xpos, ypos - SPEED, dest.w, dest.h }; return r; }
     SDL_Rect get_step_right() { SDL_Rect r = { xpos + SPEED, ypos, dest.w, dest.h }; return r; }
