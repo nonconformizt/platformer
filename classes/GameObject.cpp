@@ -1,13 +1,18 @@
 
 #include "GameObject.h"
 #include "TextureManager.h"
+#include "Map.h"
 
-GameObject::GameObject(const char * texturesheet, SDL_Renderer * renderer, int x, int y)
+GameObject::GameObject(const char * texturesheet, int x, int y)
 {
     xpos = x;
     ypos = y;
-    rend = renderer;
-    texture = TextureManager::load(texturesheet, rend);
+    texture = TextureManager::load(texturesheet);
+
+    src.w = 180;
+    src.h = 318;
+    dest.w = 36;
+    dest.h = 64;
 }
 
 GameObject::~GameObject()
@@ -15,18 +20,14 @@ GameObject::~GameObject()
 
 void GameObject::update()
 {
-    xpos++;
-    ypos++;
-
-    src.h = src.w = 360;
-    src.x = src.y = 0;
+    src.x = 0;
+    src.y = 0;
 
     dest.x = xpos;
     dest.y = ypos;
-    dest.w = dest.h = 64;
 }
 
 void GameObject::render()
 {
-    SDL_RenderCopy(rend, texture, &src, &dest);
+    SDL_RenderCopy(Game::rend, texture, &src, &dest);
 }

@@ -6,8 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define WINDOW_W 800
-#define WINDOW_H 600
+#define WINDOW_W 960
+#define WINDOW_H 832
 #define DELAY 16
 
 class Game {
@@ -19,15 +19,20 @@ public:
 
     void handleEvents();
     void update();
-    bool running() { return isRunning; }
+    bool running() { return is_running; }
     void render();
     void clean();
 
+    static SDL_Renderer *rend;
+
 private:
-    bool isRunning = false;
-    int cnt = 0;
-    SDL_Window *window;
-    SDL_Renderer *rend;
+    bool is_running = false;
+
+    // running controls
+    bool is_down, is_up, is_left, is_right;
+
+    SDL_Window * window;
+
 };
 
 
