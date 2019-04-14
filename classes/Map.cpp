@@ -87,9 +87,21 @@ bool Map::checkCollision(SDL_Rect rect)
     if (map[row][col] == 1){
         return true;
     }
+    // center left dot
+    col = (rect.x + 2) / 32;
+    row = (rect.y + rect.h/2 + 2) / 32;
+    if (map[row][col] == 1){
+        return true;
+    }
     // top right dot
     col = (rect.x + rect.w - 2) / 32;
     row = (rect.y + 2) / 32;
+    if (map[row][col] == 1){
+        return true;
+    }
+    // center right dot
+    col = (rect.x + rect.w - 2) / 32;
+    row = (rect.y + rect.h/2 + 2) / 32;
     if (map[row][col] == 1){
         return true;
     }
@@ -108,5 +120,3 @@ bool Map::checkCollision(SDL_Rect rect)
 
     return false;
 }
-
-

@@ -27,10 +27,8 @@ public:
 
 private:
     int xpos, ypos;
-
     SDL_Texture * texture;
     SDL_Rect dest, src;
-    SDL_Renderer * rend;
 
 };
 
