@@ -12,14 +12,16 @@ Map * map = nullptr;
 
 GameObject * player = nullptr;
 
-Mushroom * mush[2];
-int mushrooms_x[2] = { WINDOW_W - 320, 192 };
-int mushrooms_y[2] = { 192, 224 };
+const int mush_n = 6;
+Mushroom * mush[mush_n];
+int mushrooms_x[mush_n] = { 640, 192, 785, 835, 886, 534 };
+int mushrooms_y[mush_n] = { 192, 224, 243, 179, 704, 758 };
 int mushrooms_count = 0;
 
-Coin * coins[4];
-int coins_x[4] = { 100, 34, 231, 444 };
-int coins_y[4] = { 342, 65, 645, 230 };
+const int coins_n = 12;
+Coin * coins[coins_n];
+int coins_x[coins_n] = { 100, 34, 231, 444, 892, 736, 760, 756, 710, WINDOW_W - 4*32, 18*32, WINDOW_W - 7*32 };
+int coins_y[coins_n] = { 342, 65, 645, 230, 130, 320, 300, 330, 300, 13*32, 60, WINDOW_H - 7*32 };
 int coins_count = 0;
 
 
@@ -49,9 +51,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     }
 
     player = new GameObject("./assets/player.png", WINDOW_W - 80, 10);
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < mush_n; i++)
         mush[i] = new Mushroom("./assets/mushroom.png", mushrooms_x[i], mushrooms_y[i]);
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < coins_n; i++)
         coins[i] = new Coin("./assets/coin.png", coins_x[i], coins_y[i]);
     map = new Map();
 }
@@ -66,7 +68,7 @@ void Game::handleEvents()
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
             is_running = false;
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < mush_n; ++i)
                 if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect())) {
                     mush[i]->sound();
                     mush[i]->isActive = false;
@@ -109,12 +111,15 @@ void Game::update()
 
     player->animated = !is_right && !is_left && !is_up && !is_down;
 
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < coins_n; ++i) {
+        coins[i]->update();
         if (coins[i]->isActive && coins[i]->checkCollision(player->get_rect())) {
             coins[i]->sound();
             coins[i]->isActive = false;
             coins_count++;
         }
+    }
+
 
     // check win
     SDL_Rect player_rect = player->get_rect();
@@ -122,7 +127,7 @@ void Game::update()
     int pl_row = (player_rect.y + player_rect.h - 2) / 32;
 
     if (pl_row == 26 && (pl_col == 1 || pl_col == 2) ) {
-        char message[256] = "You win!\n === COLLECTED COINS: ";
+        char message[256] = "You win!\n=== COLLECTED COINS: ";
         char buffer[256];
         itoa(coins_count, buffer, 10);
         strcat(message, buffer);
@@ -143,10 +148,10 @@ void Game::render()
     SDL_RenderClear(rend);
 
     map->draw();
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < mush_n; ++i)
         if (mush[i]->isActive)
             mush[i]->render();
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < coins_n; ++i)
         if (coins[i]->isActive)
             coins[i]->render();
     player->render();

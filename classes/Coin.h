@@ -10,6 +10,7 @@ public:
     Coin(const char * texturesheet, int x, int y);
     void render();
     void sound();
+    void update();
     bool isActive;
     bool checkCollision(SDL_Rect rect);
 

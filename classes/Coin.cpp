@@ -22,6 +22,11 @@ Coin::Coin(const char * texturesheet, int x, int y)
     device = SDL_OpenAudioDevice(nullptr, 0, &sound_spec, nullptr, 0);
 }
 
+void Coin::update()
+{
+    src.x = src.w * int((SDL_GetTicks() / 150) % 6 );
+}
+
 void Coin::render()
 {
     SDL_RenderCopy(Game::rend, texture, &src, &dest);
