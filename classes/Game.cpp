@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Game.h"
 #include "TextureManager.h"
 #include "GameObject.h"
@@ -32,6 +33,7 @@ Game::~Game()
 
 void Game::init(const char* title, int width, int height, bool fullscreen)
 {
+    int i;
     Uint32 flags = fullscreen ? SDL_WINDOW_FULLSCREEN : 0;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -47,9 +49,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
     }
 
     player = new GameObject("./assets/player.png", WINDOW_W - 80, 10);
-    for (int i = 0; i < 2; ++i)
+    for (i = 0; i < 2; i++)
         mush[i] = new Mushroom("./assets/mushroom.png", mushrooms_x[i], mushrooms_y[i]);
-    for (int i = 0; i < 4; ++i)
+    for (i = 0; i < 4; i++)
         coins[i] = new Coin("./assets/coin.png", coins_x[i], coins_y[i]);
     map = new Map();
 }
@@ -65,7 +67,7 @@ void Game::handleEvents()
             is_running = false;
         else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
             for (int i = 0; i < 2; ++i)
-                if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect())) {                    mush[i]->sound();
+                if (mush[i]->isActive && mush[i]->checkCollision(player->get_rect())) {
                     mush[i]->sound();
                     mush[i]->isActive = false;
                     mushrooms_count++;
@@ -105,12 +107,33 @@ void Game::update()
         if (!map->checkCollision(player->get_step_right()))
             player->move_right();
 
+    player->animated = !is_right && !is_left && !is_up && !is_down;
+
     for (int i = 0; i < 4; ++i)
         if (coins[i]->isActive && coins[i]->checkCollision(player->get_rect())) {
             coins[i]->sound();
             coins[i]->isActive = false;
             coins_count++;
         }
+
+    // check win
+    SDL_Rect player_rect = player->get_rect();
+    int pl_col = (player_rect.x) / 32;
+    int pl_row = (player_rect.y + player_rect.h - 2) / 32;
+
+    if (pl_row == 26 && (pl_col == 1 || pl_col == 2) ) {
+        char message[256] = "You win!\n === COLLECTED COINS: ";
+        char buffer[256];
+        itoa(coins_count, buffer, 10);
+        strcat(message, buffer);
+        strcat(message, " ===\n=== KILLED ENEMIES: ");
+        itoa(mushrooms_count, buffer, 10);
+        strcat(message, buffer);
+        strcat(message, " ===\n");
+
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Congratulations!", message, nullptr);
+        is_running = false;
+    }
 
     player->update();
 }

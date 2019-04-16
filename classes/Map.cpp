@@ -82,38 +82,38 @@ bool Map::checkCollision(SDL_Rect rect)
     int row, col;
 
     // top left dot
-    col = (rect.x + 2) / 32;
-    row = (rect.y + 2) / 32;
+    col = (rect.x + 14 + 1) / 32;
+    row = (rect.y + 6 + 1) / 32;
     if (map[row][col] == 1){
         return true;
     }
     // center left dot
-    col = (rect.x + 2) / 32;
-    row = (rect.y + rect.h/2 + 2) / 32;
+    col = (rect.x + 14 + 1) / 32;
+    row = (rect.y + rect.h/2) / 32;
     if (map[row][col] == 1){
         return true;
     }
     // top right dot
-    col = (rect.x + rect.w - 2) / 32;
-    row = (rect.y + 2) / 32;
+    col = (rect.x + rect.w - 24 - 1) / 32;
+    row = (rect.y + 6 + 1) / 32;
     if (map[row][col] == 1){
         return true;
     }
     // center right dot
-    col = (rect.x + rect.w - 2) / 32;
-    row = (rect.y + rect.h/2 + 2) / 32;
+    col = (rect.x + rect.w - 24 - 1) / 32;
+    row = (rect.y + rect.h/2 + 1) / 32;
     if (map[row][col] == 1){
         return true;
     }
     // bottom left dot
-    col = (rect.x + 2) / 32;
-    row = (rect.y + rect.h - 2) / 32;
+    col = (rect.x + 14 + 1) / 32;
+    row = (rect.y + rect.h - 4 - 1) / 32;
     if (map[row][col] == 1){
         return true;
     }
     // bottom right dot
-    col = (rect.x + rect.w - 2) / 32;
-    row = (rect.y + rect.h - 2) / 32;
+    col = (rect.x + rect.w - 24 - 1) / 32;
+    row = (rect.y + rect.h - 4 - 1) / 32;
     if (map[row][col] == 1){
         return true;
     }

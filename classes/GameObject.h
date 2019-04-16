@@ -12,6 +12,8 @@ public:
     GameObject(const char * texturesheet, int x, int y);
     ~GameObject();
 
+    bool animated;
+
     void update();
     void render();
     void move_down() { ypos += SPEED; }
