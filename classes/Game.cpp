@@ -126,7 +126,7 @@ void Game::update()
     int pl_col = (player_rect.x) / 32;
     int pl_row = (player_rect.y + player_rect.h - 2) / 32;
 
-    if (pl_row == 26 && (pl_col == 1 || pl_col == 2) ) {
+    if (pl_row == 25 && (pl_col == 1 || pl_col == 2) ) {
         char message[256] = "You win!\n=== COLLECTED COINS: ";
         char buffer[256];
         itoa(coins_count, buffer, 10);
